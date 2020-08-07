@@ -13,11 +13,10 @@ import (
 
 	"github.com/lensgolda/geocapture/logfile"
 	"github.com/lensgolda/geocapture/models"
+	"github.com/lensgolda/geocapture/settings"
 )
 
 const (
-	URL                = "http://open.mapquestapi.com/nominatim/v1/search.php?"
-	ApiKey             = "Sl58Ih1d1uwj7JzPZJnHD78nzApidBA7"
 	providerFailedFile = "mapquest.failed"
 	providerName       = "mapquest"
 )
@@ -52,12 +51,12 @@ func NewProvider() *Provider {
 }
 
 func (mapq *Provider) CreateCitiesRequest(city models.City) (*http.Request, error) {
-	req, err := http.NewRequest("GET", URL, nil)
+	req, err := http.NewRequest("GET", settings.Config.Mapquest.URL, nil)
 	if err != nil {
 		return nil, err
 	}
 	q := req.URL.Query()
-	q.Add("key", ApiKey)
+	q.Add("key", settings.Config.Mapquest.ApiKey)
 	q.Add("format", "json")
 	if city.Name != nil {
 		q.Add(city.Type(), *city.Name)

@@ -14,12 +14,10 @@ import (
 
 	"github.com/lensgolda/geocapture/logfile"
 	"github.com/lensgolda/geocapture/models"
+	"github.com/lensgolda/geocapture/settings"
 )
 
 const (
-	AppId              = "plJAUS6NLTPP"
-	ApiKey             = "ffb8cf6058f5f094f77c1d4d77d2d669"
-	URL                = "https://places-dsn.algolia.net/1/places/query"
 	backupHost1        = "https://places-1.algolianet.com"
 	backupHost2        = "https://places-2.algolianet.com"
 	backupHost3        = "https://places-3.algolianet.com"
@@ -76,15 +74,15 @@ func (alg *Algolia) CreateCitiesRequest(city models.City) (*http.Request, error)
 		return nil, err
 	}
 
-	req, err := http.NewRequest("POST", URL, bytes.NewBuffer(requestBody))
+	req, err := http.NewRequest("POST", settings.Config.Algolia.URL, bytes.NewBuffer(requestBody))
 	if err != nil {
 		return nil, err
 	}
 
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("User-Agent", "MSIE/15.0")
-	req.Header.Add("X-Algolia-Application-Id", AppId)
-	req.Header.Add("X-Algolia-API-Key", ApiKey)
+	req.Header.Add("X-Algolia-Application-Id", settings.Config.Algolia.AppId)
+	req.Header.Add("X-Algolia-API-Key", settings.Config.Algolia.ApiKey)
 
 	return req, nil
 }
